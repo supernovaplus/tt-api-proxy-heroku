@@ -17,7 +17,6 @@ module.exports = async (req, res, next) => {
             counter++;
         }
 
-    // }else if((server.data === null && !server.error) || Date.now() - server.timestamp > 5000){
     }else if(Date.now() - server.timestamp > 5000){
         if(allow_ip(request_ip)){
             await fetch_position(server);
