@@ -42,11 +42,12 @@ app.get(secret_endpoints[0], async (_, res) => res.json({
 app.get(secret_endpoints[1], async (_, res) => res.json(await query_db("select * from ip;")));
 
 app.get(secret_endpoints[2], async (_, res) => res.json({
-  freemem_mb: Math.round(os.freemem() / 1024 / 1024 * 100) / 100,
-  totalmem_mb: Math.round(os.totalmem() / 1024 / 1024 * 100) / 100,
+  free_mem_mb: Math.round(os.freemem() / 1024 / 1024 * 100) / 100,
+  total_mem_mb: Math.round(os.totalmem() / 1024 / 1024 * 100) / 100,
   uptime: os.uptime(),
-  loadavg: os.loadavg(),
-  cpus: os.cpus()
+  load_avg: os.loadavg(),
+  cpus: os.cpus(),
+  local_time: new Date()
 }));
 
 app.get('*', (_, res) => res.status(404).json({error: "404 Not Found"}));
