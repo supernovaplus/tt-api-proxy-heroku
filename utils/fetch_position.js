@@ -23,15 +23,11 @@ module.exports = fetch_position = (server) => {
     }).catch(error => {
         server.data = null;
         server.timestamp = Date.now();
-        try{
-            if(/timeout/.test(error.message)){
-                server.error = "server timeout error";
-            }else{
-                console.log(error.message);
-                server.error = "server error";
-            }
-        }catch(err){
-            server.error = "error parse problem";
+        if(/timeout/.test(error.message)){
+            server.error = "server timeout error";
+        }else{
+            console.log(error.message);
+            server.error = "server error";
         }
         server.fetching = false;
         return {

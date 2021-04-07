@@ -18,7 +18,7 @@ if(process.env.NODE_ENV === "production"){
   app.use((_, res, next) => { res.setHeader('Cache-Control', 'private, max-age=4'); next(); })
   //avoid dyno sleep
   setInterval(() => {
-    axios("https://novaplus.herokuapp.com/charges").catch(err=>{});
+    axios("https://novaplus-api.herokuapp.com/charges").catch(err=>{}); //replace with your dyno url
   }, 600_000); //10 min
 }
 
