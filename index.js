@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 5000;
-// const compression = require('compression');
+const compression = require('compression');
 const cors = require('cors');
 const axios = require("axios");
 const cache = require("./utils/cache");
@@ -23,11 +23,11 @@ if(process.env.NODE_ENV === "production"){
 }
 
 app.use(
-  // compression({level: 1}),
+  // compression({level: 1}), //saves ~3x bandwidth, but adds ~90ms latency
   express.static('public')
 );
 
-app.get('/positions/cache', cors(), (_, res) => res.json(cache.positions));
+app.get('/positions/cache', compression({level: 1}), cors(), (_, res) => res.json(cache.positions));
 app.get('/positions/:ip', cors(), require("./routes/positions"));
 app.get('/vehicles', cors(), require("./routes/vehicles"));
 app.get('/status/:ip', cors(), require("./routes/status"));
