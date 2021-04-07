@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 5000;
-const compression = require('compression');
+// const compression = require('compression');
 const cors = require('cors');
 const axios = require("axios");
 const cache = require("./utils/cache");
@@ -23,7 +23,7 @@ if(process.env.NODE_ENV === "production"){
 }
 
 app.use(
-  compression({level: 1}),
+  // compression({level: 1}),
   express.static('public')
 );
 
