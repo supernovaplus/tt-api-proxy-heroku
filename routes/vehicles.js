@@ -1,5 +1,5 @@
-const cache = require("../utils/cache");
-const fetch_servers = require("../utils/fetch_position");
+const cache = require("../controllers/cache");
+const fetch_servers = require("../controllers/fetch_position");
 
 module.exports = get_vehicle_data_json = async (req, res) => {
 	if(cache.vehicles_cache.timestamp < Date.now() - 300_000){ //5min

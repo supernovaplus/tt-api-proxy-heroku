@@ -1,11 +1,12 @@
+require("dotenv").config()
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const compression = require('compression');
 const cors = require('cors');
 const axios = require("axios");
-const cache = require("./utils/cache");
-const { query_db } = require("./utils/database");
+const cache = require("./controllers/cache");
+const { query_db } = require("./controllers/database");
 const os = require('os');
 const enforceSSL = require('express-sslify');
 const secret_endpoints = process.env.SECRET_ENDPOINTS.split("|");
@@ -35,8 +36,8 @@ app.get('/charges', (_, res) => res.json({charges: cache.charges}));
 
 app.get(secret_endpoints[0], async (_, res) => res.json({
   list: cache.ip_logs,
-  length: Object.keys(cache.ip_logs).length, 
-  total: Object.values(cache.ip_logs).reduce((pv, cv) => pv + cv, 0)
+  length: (Object.keys(cache.ip_logs) || []).length, 
+  total: (Object.values(cache.ip_logs) || []).reduce((pv, cv) => pv + cv, 0)
 }));
 
 app.get(secret_endpoints[1], async (_, res) => res.json(await query_db("select * from ip;")));

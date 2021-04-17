@@ -1,5 +1,6 @@
-const cache = require("../utils/cache");
-const fetch_status = require("../utils/fetch_status");
+const cache = require("../controllers/cache");
+const fetch_status = require("../controllers/fetch_status");
+const { timeout } = require("../controllers/misc");
 
 module.exports = async (req, res, next) => {
     if(!req.params.ip || !(req.params.ip in cache.status)) return next();

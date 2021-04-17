@@ -1,7 +1,7 @@
-const cache = require("../utils/cache");
-const timeout = (time) => new Promise(resolve => setTimeout(resolve, time));
-const fetch_position = require("../utils/fetch_position");
-const allow_ip = require("../utils/rate_limit");
+const cache = require("../controllers/cache");
+const { timeout } = require("../controllers/misc");
+const fetch_position = require("../controllers/fetch_position");
+const allow_ip = require("../controllers/rate_limit");
 
 module.exports = async (req, res, next) => {
     if(!req.params.ip || !(req.params.ip in cache.positions)) return next();

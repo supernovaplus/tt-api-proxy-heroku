@@ -1,5 +1,5 @@
-const cache = require("../utils/cache");
-const { upload_ip } = require("../utils/database");
+const cache = require("./cache");
+const { upload_ip } = require("./database");
 
 //rate limit resets every 24 hours (when dyno restarts)
 module.exports = allow_ip = (request_ip) => {

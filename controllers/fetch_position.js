@@ -1,5 +1,5 @@
 const axios = require('axios');
-const cache = require("../utils/cache");
+const cache = require("./cache");
 
 module.exports = fetch_position = (server) => {
     server.fetching = true;
