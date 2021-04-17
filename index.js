@@ -31,6 +31,7 @@ app.use(
 app.get('/positions/cache', compression({level: 1}), cors(), (_, res) => res.json(cache.positions));
 app.get('/positions/:ip', cors(), require("./routes/positions"));
 app.get('/vehicles', cors(), require("./routes/vehicles"));
+app.get('/skillboost', cors(), require("./routes/skillboost"));
 app.get('/status/:ip', cors(), require("./routes/status"));
 app.get('/charges', (_, res) => res.json({charges: cache.charges}));
 

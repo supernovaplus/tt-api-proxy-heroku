@@ -2,7 +2,7 @@ const cache = require("../controllers/cache");
 const fetch_status = require("../controllers/fetch_status");
 const { timeout } = require("../controllers/misc");
 
-module.exports = async (req, res, next) => {
+module.exports = route_status = async (req, res, next) => {
     if(!req.params.ip || !(req.params.ip in cache.status)) return next();
     const server = cache.status[req.params.ip];
 

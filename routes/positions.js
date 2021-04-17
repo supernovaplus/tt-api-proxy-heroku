@@ -3,7 +3,7 @@ const { timeout } = require("../controllers/misc");
 const fetch_position = require("../controllers/fetch_position");
 const allow_ip = require("../controllers/rate_limit");
 
-module.exports = async (req, res, next) => {
+module.exports = route_positions = async (req, res, next) => {
     if(!req.params.ip || !(req.params.ip in cache.positions)) return next();
 
     const server = cache.positions[req.params.ip];

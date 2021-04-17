@@ -3,8 +3,14 @@ const servers_list = require("../public/servers_list.json");
 const cache = {
     positions: {},
     status: {},
+    skillboost: {
+        fetching: false,
+        timestamp: 0,
+        data: null
+    },
     ip_logs: {},
     vehicles_cache: {
+        fetching: false, //add this
         timestamp: 0,
         sorted_vehicles: null,
         sorted_classes: null

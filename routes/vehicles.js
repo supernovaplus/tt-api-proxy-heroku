@@ -1,7 +1,7 @@
 const cache = require("../controllers/cache");
 const fetch_servers = require("../controllers/fetch_position");
 
-module.exports = get_vehicle_data_json = async (req, res) => {
+module.exports = route_vehicles = async (_, res) => {
 	if(cache.vehicles_cache.timestamp < Date.now() - 300_000){ //5min
 
 		const temp_vehicles = {};
