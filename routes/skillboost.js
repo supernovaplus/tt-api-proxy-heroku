@@ -3,6 +3,7 @@ const { timeout } = require("../controllers/misc");
 const fetch_skillboost = require("../controllers/fetch_skillboost");
 
 module.exports = route_skillboost = async (_, res) => {
+    res.setHeader('Cache-Control', 'private, max-age=60');
 
     if(sb_cache.fetching){
         let counter = 0;
