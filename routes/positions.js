@@ -16,7 +16,6 @@ module.exports = route_positions = async (req, res, next) => {
             await timeout(400); 
             counter++;
         }
-
     }else if(Date.now() - server.timestamp > 5000){
         if(allow_ip(request_ip)){
             await fetch_position(server);

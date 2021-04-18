@@ -28,6 +28,8 @@ app.use(
   express.static('public')
 );
 
+require("./controllers/routine");
+
 app.get('/positions/cache', compression({level: 1}), cors(), (_, res) => res.json(cache.positions));
 app.get('/positions/:ip', cors(), require("./routes/positions"));
 app.get('/vehicles', cors(), require("./routes/vehicles"));

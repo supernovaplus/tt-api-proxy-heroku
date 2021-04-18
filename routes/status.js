@@ -12,7 +12,6 @@ module.exports = route_status = async (req, res, next) => {
             await timeout(400); 
             counter++;
         }
-
     }else if(Date.now() - server.timestamp > 5000){
         await fetch_status(server);
     }

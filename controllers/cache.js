@@ -10,7 +10,7 @@ const cache = {
     },
     ip_logs: {},
     vehicles_cache: {
-        fetching: false, //add this
+        fetching: false,
         timestamp: 0,
         sorted_vehicles: null,
         sorted_classes: null
