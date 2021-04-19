@@ -1,3 +1,7 @@
+function timeout (time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+}
+
 module.exports = {
-    timeout: time => new Promise(resolve => setTimeout(resolve, time))
+    timeout
 }

@@ -28,7 +28,7 @@ app.use(
   express.static('public')
 );
 
-require("./controllers/routine");
+require("./controllers/routine"); //schedules
 
 app.get('/positions/cache', compression({level: 1}), cors(), (_, res) => res.json(cache.positions));
 app.get('/positions/:ip', cors(), require("./routes/positions"));

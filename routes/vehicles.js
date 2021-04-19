@@ -3,7 +3,6 @@ const fetch_vehicles = require("../controllers/fetch_vehicles");
 const { timeout } = require("../controllers/misc");
 
 module.exports = route_vehicles = async (_, res) => {
-
 	if(cache.vehicles_cache.fetching){
         let counter = 0;
         while(sb_cache.fetching && counter < 20){
