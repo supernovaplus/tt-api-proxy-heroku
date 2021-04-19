@@ -1,6 +1,7 @@
 const axios = require('axios');
 const { skillboost: skillboost_cache } = require("../controllers/cache");
 const servers_list = require("../public/servers_list.json");
+const post_discord_log = require("../controllers/post_discord_log");
 
 module.exports = fetch_skillboost = (recurring = false, attempt = 0) => {
     // if all servers are offline attempt to fetch once every minute for 100 minutes
