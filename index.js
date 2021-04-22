@@ -4,8 +4,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const compression = require('compression');
 const cors = require('cors');
-const axios = require("axios");
-const cache = require("./controllers/cache");
+const { positions_cache, ip_log_cache, get_charges, status_cache } = require("./controllers/cache");
 const { query_db } = require("./controllers/database");
 const os = require('os');
 const enforceSSL = require('express-sslify');
@@ -17,30 +16,26 @@ if(process.env.NODE_ENV === "production"){
   app.use(enforceSSL.HTTPS({ trustProtoHeader: true }));
   //client side cache
   app.use((_, res, next) => { res.setHeader('Cache-Control', 'private, max-age=4'); next(); })
-  //avoid dyno sleep
-  setInterval(() => {
-    axios("https://novaplus-api.herokuapp.com/charges").catch(err=>{}); //replace with your dyno url
-  }, 600_000); //10 min
+  //compresses the data, saves ~3x bandwidth, but adds ~90ms latency
+  //compression({level: 1}), 
 }
 
-app.use(
-  // compression({level: 1}), //saves ~3x bandwidth, but adds ~90ms latency
-  express.static('public')
-);
+app.use(express.static('public'));
 
 require("./controllers/routine"); //schedules
 
-app.get('/positions/cache', compression({level: 1}), cors(), (_, res) => res.json(cache.positions));
+app.get('/positions/cache', compression({level: 1}), cors(), (_, res) => res.json(positions_cache));
 app.get('/positions/:ip', cors(), require("./routes/positions"));
 app.get('/vehicles', cors(), require("./routes/vehicles"));
 app.get('/skillboost', cors(), require("./routes/skillboost"));
+app.get('/status/cache', compression({level: 1}), cors(), (_, res) => res.json(status_cache));
 app.get('/status/:ip', cors(), require("./routes/status"));
-app.get('/charges', (_, res) => res.json({charges: cache.charges}));
+app.get('/charges', (_, res) => res.json({ charges: get_charges() }));
 
 app.get(secret_endpoints[0], async (_, res) => res.json({
-  list: cache.ip_logs,
-  length: (Object.keys(cache.ip_logs) || []).length, 
-  total: (Object.values(cache.ip_logs) || []).reduce((pv, cv) => pv + cv, 0)
+  list: ip_log_cache,
+  length: (Object.keys(ip_log_cache) || []).length, 
+  total: (Object.values(ip_log_cache) || []).reduce((acc, val) => acc + val, 0)
 }));
 
 app.get(secret_endpoints[1], async (_, res) => res.json(await query_db("select * from ip;")));
@@ -54,6 +49,10 @@ app.get(secret_endpoints[2], async (_, res) => res.json({
   local_time: new Date()
 }));
 
-app.get('*', (_, res) => res.status(404).json({error: "404 Not Found"}));
+app.get('*', (_, res) => {
+  res.status(404);
+  res.setHeader("content-type", "application/json");
+  res.send(`{"error": "404 Not Found"}`);
+});
 
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));

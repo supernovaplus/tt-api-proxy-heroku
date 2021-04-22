@@ -1,11 +1,12 @@
-const cache = require("../controllers/cache");
+const { status_cache } = require("../controllers/cache");
 const fetch_status = require("../controllers/fetch_status");
 const { timeout } = require("../controllers/misc");
 
 module.exports = route_status = async (req, res, next) => {
-    if(!req.params.ip || !(req.params.ip in cache.status)) return next();
-    const server = cache.status[req.params.ip];
+    if(!req.params.ip || !(req.params.ip in status_cache)) return next();
 
+    const server = status_cache[req.params.ip];
+    
     if(server.fetching){
         let counter = 0;
         while(server.fetching && counter < 20){

@@ -1,4 +1,4 @@
-const { skillboost: skillboost_cache } = require("../controllers/cache");
+const { skillboost_cache } = require("../controllers/cache");
 const { timeout } = require("../controllers/misc");
 // const fetch_skillboost = require("../controllers/fetch_skillboost");
 

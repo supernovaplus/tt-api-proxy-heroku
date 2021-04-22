@@ -1,43 +1,45 @@
 const schedule = require('node-schedule');
-const fetch_skillboost = require("../controllers/fetch_skillboost");
-const { skillboost: skillboost_cache } = require("../controllers/cache");
-const post_discord_log = require("../controllers/post_discord_log");
+const fetch_skillboost = require("./fetch_skillboost");
+const { skillboost_cache } = require("./cache");
+const post_discord_log = require("./post_discord_log");
+const fetch_charges = require("./fetch_charges");
+const axios = require("axios");
 
-//onload
-console.log("Onload Skillboost Fetching...")
-fetch_skillboost(true);
+//get charges on load
+fetch_charges();
 
-//schedule
-(() => {
-    const rule = new schedule.RecurrenceRule();
-    rule.tz = 'Etc/UTC';
-    rule.hour = 0;
-    rule.minute = 1;
-    // rule.second = 2;
+if(process.env.NODE_ENV === "production"){
+    //avoid dyno sleep
+    setInterval(() => axios("https://novaplus-api.herokuapp.com/charges").catch(err=>{}), 600_000); //replace with your dyno url 600_000 = 10 min
 
-    const job = schedule.scheduleJob(rule, () => {
-        fetch_skillboost(true);
-        post_discord_log(`[MAIN] Skillboost schedule: next scan @ ${new Date()} -> ${JSON.stringify(skillboost_cache.data)}`);
-    })
+    //onload
+    console.log("Onload Skillboost Fetching...")
+    fetch_skillboost(true);
 
-    post_discord_log(`[${String(process.env.NODE_ENV).toUpperCase()}]: [MAIN] Skillboost schedule: started! first scan will be at [${new Date(job?.nextInvocation()?._date?.ts)}]`);
-})();
+    //skillboost update schedule
+    (() => {
+        const rule = new schedule.RecurrenceRule();
+        rule.tz = 'Etc/UTC';
+        rule.hour = 0;
+        rule.minute = 1;
 
+        const job = schedule.scheduleJob(rule, async () => {
+            try{
 
-//backup schedule just in case the old data wasn't updated
-(() => {
+                await fetch_skillboost(true); //scan server on ~00:01
+                post_discord_log(`[BACKUP] Skillboost schedule: next scan @ ${new Date()} -> ${JSON.stringify(skillboost_cache.data)}`);
+    
+                setTimeout(() => { //scan server on ~00:11
+                    fetch_skillboost(true);
+                    setTimeout(() => fetch_skillboost(true), 1000 * 60 * 30); //scan server on ~00:41
+                }, 1000 * 60 * 10);
 
-    const rule = new schedule.RecurrenceRule();
-    rule.tz = 'Etc/UTC';
-    rule.hour = 1;
-    rule.minute = 0;
-    // rule.second = 2;
+            }catch(err){
+                console.log(err)
+            }
 
-    const job = schedule.scheduleJob(rule, () => {
-        fetch_skillboost(true);
-        post_discord_log(`[BACKUP] Skillboost schedule: next scan @ ${new Date()} -> ${JSON.stringify(skillboost_cache.data)}`);
-    })
+        });
 
-    post_discord_log(`[${String(process.env.NODE_ENV).toUpperCase()}]: [BACKUP] Skillboost schedule: started! first scan will be at [${new Date(job?.nextInvocation()?._date?.ts)}]`);
-
-})();
+        post_discord_log(`[${String(process.env.NODE_ENV).toUpperCase()}]: Skillboost schedule: started! first scan will be at [${new Date(job?.nextInvocation()?._date?.ts)}]`);
+    })();
+}

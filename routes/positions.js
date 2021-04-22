@@ -1,12 +1,12 @@
-const cache = require("../controllers/cache");
+const { positions_cache, get_charges } = require("../controllers/cache");
 const { timeout } = require("../controllers/misc");
 const fetch_position = require("../controllers/fetch_position");
 const allow_ip = require("../controllers/rate_limit");
 
 module.exports = route_positions = async (req, res, next) => {
-    if(!req.params.ip || !(req.params.ip in cache.positions)) return next();
+    if(!req.params.ip || !(req.params.ip in positions_cache)) return next();
 
-    const server = cache.positions[req.params.ip];
+    const server = positions_cache[req.params.ip];
     const request_ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     let rate_limited = false;
 
@@ -36,7 +36,7 @@ module.exports = route_positions = async (req, res, next) => {
             data: server.data,
             timestamp: server.timestamp,
             error: server.error,
-            charges: cache.charges,
+            charges: get_charges(),
         }); 
     }
 }

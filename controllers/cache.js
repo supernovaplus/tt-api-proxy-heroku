@@ -1,26 +1,32 @@
 const servers_list = require("../public/servers_list.json");
 
 const cache = {
-    positions: {},
-    status: {},
-    skillboost: {
+    positions_cache: {},
+    status_cache: {},
+    skillboost_cache: {
         fetching: false,
         timestamp: 0,
         data: null
     },
-    ip_logs: {},
     vehicles_cache: {
         fetching: false,
         timestamp: 0,
         sorted_vehicles: null,
         sorted_classes: null
     },
-    charges: 0,
+
+    ip_log_cache: {},
+    charges: 5,
+    set_charges: (num) => this.charges = num,
+    get_charges: () => this.charges,
     // last_working_server: null
 };
 
+cache.get_charges.bind(cache);
+cache.set_charges.bind(cache);
+
 for (const server_ip in servers_list) {
-    cache.positions[server_ip] = {
+    cache.positions_cache[server_ip] = {
         ip: server_ip,
         name: servers_list[server_ip],
         data: null,
@@ -28,7 +34,7 @@ for (const server_ip in servers_list) {
         fetching: false
     }
 
-    cache.status[server_ip] = {
+    cache.status_cache[server_ip] = {
         ip: server_ip,
         name: servers_list[server_ip],
         data: null,

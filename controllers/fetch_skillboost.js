@@ -1,7 +1,7 @@
 const axios = require('axios');
-const { skillboost: skillboost_cache } = require("../controllers/cache");
+const { skillboost_cache } = require("./cache");
 const servers_list = require("../public/servers_list.json");
-const post_discord_log = require("../controllers/post_discord_log");
+const post_discord_log = require("./post_discord_log");
 
 module.exports = fetch_skillboost = (recurring = false, attempt = 0) => {
     // if all servers are offline attempt to fetch once every minute for 100 minutes
@@ -26,12 +26,9 @@ module.exports = fetch_skillboost = (recurring = false, attempt = 0) => {
                 skillboost_cache.fetching = false;
                 found = true;
                 resolve(true);
-
-                setTimeout(() => post_discord_log(`Skillboost fetch successful -> bonus=${skillboost_cache.data.bonus}; skill=${skillboost_cache.data.skill}`), 0);
                 
             }).catch(error => {}); //server is offline
         }
-
         
         if(!found){ //if all servers are offline
             skillboost_cache.data = null;
