@@ -21,7 +21,7 @@ if(process.env.NODE_ENV === "production"){
         const rule = new schedule.RecurrenceRule();
         rule.tz = 'Etc/UTC';
         rule.hour = 0;
-        rule.minute = 1;
+        rule.minute = 2;
 
         const job = schedule.scheduleJob(rule, async () => {
             try{
@@ -32,7 +32,7 @@ if(process.env.NODE_ENV === "production"){
                 setTimeout(() => { //scan server on ~00:11
                     fetch_skillboost(true);
                     setTimeout(() => fetch_skillboost(true), 1000 * 60 * 30); //scan server on ~00:41
-                }, 1000 * 60 * 10);
+                }, 1000 * 60 * 9);
 
             }catch(err){
                 console.log(err)

@@ -19,7 +19,7 @@ module.exports = fetch_charges = () => new Promise(async resolve => {
             }
             found = true;
             resolve(true);
-            setTimeout(() => console.log(`Charges: ${get_charges()}`));
+            setTimeout(() => console.log(`Charges: ${get_charges()}`), 0);
             
         }).catch(error => {}); //server is offline
     }
