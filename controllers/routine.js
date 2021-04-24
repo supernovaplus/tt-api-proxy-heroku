@@ -4,6 +4,7 @@ const { skillboost_cache } = require("./cache");
 const post_discord_log = require("./post_discord_log");
 const fetch_charges = require("./fetch_charges");
 const axios = require("axios");
+const { timeout } = require("./misc");
 
 //get charges on load
 fetch_charges();
@@ -24,19 +25,21 @@ if(process.env.NODE_ENV === "production"){
         rule.minute = 2;
 
         const job = schedule.scheduleJob(rule, async () => {
-            try{
 
-                await fetch_skillboost(true); //scan server on ~00:01
-                post_discord_log(`[BACKUP] Skillboost schedule: next scan @ ${new Date()} -> ${JSON.stringify(skillboost_cache.data)}`);
-    
-                setTimeout(() => { //scan server on ~00:11
-                    fetch_skillboost(true);
-                    setTimeout(() => fetch_skillboost(true), 1000 * 60 * 30); //scan server on ~00:41
-                }, 1000 * 60 * 9);
-
-            }catch(err){
-                console.log(err)
-            }
+            const initialSkill1 = skillboost_cache.data?.skill;
+            const initialSkill2 = skillboost_cache.data?.bonus;
+            await fetch_skillboost(true); //scan server on ~00:01
+            post_discord_log(`[SKILLBOOST] next scan @ ${new Date()} -> ${skillboost_cache.data?.skill}|${skillboost_cache.data?.bonus}`);
+        
+            if(initialSkill1 !== skillboost_cache.data?.skill && initialSkill2 !== skillboost_cache.data?.bonus) return;
+            await timeout(1000 * 60 * 9); //scan after 11 minutes
+            await fetch_skillboost(true);
+            post_discord_log(`[SKILLBOOST] new data -> ${skillboost_cache.data?.skill}|${skillboost_cache.data?.bonus}`);
+        
+            if(initialSkill1 !== skillboost_cache.data?.skill && initialSkill2 !== skillboost_cache.data?.bonus) return;
+            await timeout(1000 * 60 * 30); //scan after 41 minutes
+            await fetch_skillboost(true);
+            post_discord_log(`[SKILLBOOST] new data -> ${skillboost_cache.data?.skill}|${skillboost_cache.data?.bonus}`);
 
         });
 
