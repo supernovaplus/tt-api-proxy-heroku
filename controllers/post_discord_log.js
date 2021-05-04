@@ -27,6 +27,7 @@ module.exports = post_discord_log = async(message = "") => {
             data: formData
     
         // }).then(res => {
+        //     console.log(res);
         //     axios({ //delete message
         //         method: 'DELETE',
         //         url: process.env.DISCORD_WEBHOOK_LINK + "/messages/" + res.data.id,

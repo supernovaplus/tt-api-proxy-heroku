@@ -22,7 +22,7 @@ if(process.env.NODE_ENV === "production"){
         const rule = new schedule.RecurrenceRule();
         rule.tz = 'Etc/UTC';
         rule.hour = 0;
-        rule.minute = 2;
+        rule.minute = 3;
 
         const job = schedule.scheduleJob(rule, async () => {
 
@@ -32,12 +32,12 @@ if(process.env.NODE_ENV === "production"){
             post_discord_log(`[SKILLBOOST] next scan @ ${new Date()} -> ${skillboost_cache.data?.skill}|${skillboost_cache.data?.bonus}`);
         
             if(initialSkill1 !== skillboost_cache.data?.skill && initialSkill2 !== skillboost_cache.data?.bonus) return;
-            await timeout(1000 * 60 * 9); //scan after 11 minutes
+            await timeout(1000 * 60 * 4); //scan after 11 minutes
             await fetch_skillboost(true);
             post_discord_log(`[SKILLBOOST] new data -> ${skillboost_cache.data?.skill}|${skillboost_cache.data?.bonus}`);
         
             if(initialSkill1 !== skillboost_cache.data?.skill && initialSkill2 !== skillboost_cache.data?.bonus) return;
-            await timeout(1000 * 60 * 30); //scan after 41 minutes
+            await timeout(1000 * 60 * 10); //scan after 41 minutes
             await fetch_skillboost(true);
             post_discord_log(`[SKILLBOOST] new data -> ${skillboost_cache.data?.skill}|${skillboost_cache.data?.bonus}`);
 
