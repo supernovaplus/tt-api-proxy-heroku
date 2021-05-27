@@ -2,7 +2,8 @@ const axios = require('axios');
 
 module.exports = fetch_status = (server) => {
     server.fetching = true;
-    return axios.get(`http://${server.ip}/status/widget/players.json`, {
+
+    return axios.get(`https://tycoon-${server.endpoint}.users.cfx.re/status/widget/players.json`, {
         responseType: 'json',
         timeout: server.error ? 3000 : 5000,
 
@@ -15,12 +16,14 @@ module.exports = fetch_status = (server) => {
     }).catch(error => {
         server.data = null;
         server.timestamp = Date.now();
+
         if(/timeout/.test(error.message)){
             server.error = "server timeout error";
         }else{
             console.log(error.message);
             server.error = "server error";
         }
+
         server.fetching = false;
     });
 };

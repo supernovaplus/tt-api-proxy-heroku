@@ -6,7 +6,7 @@ module.exports = route_status = async (req, res, next) => {
     if(!req.params.ip || !(req.params.ip in status_cache)) return next();
 
     res.setHeader('Cache-Control', 'private, max-age=15');
-
+    
     const server = status_cache[req.params.ip];
     
     if(server.fetching){

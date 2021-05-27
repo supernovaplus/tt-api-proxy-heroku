@@ -16,7 +16,7 @@ if(process.env.NODE_ENV === "production"){
   app.use(enforceSSL.HTTPS({ trustProtoHeader: true }));
   //client side cache
   app.use((_, res, next) => { res.setHeader('Cache-Control', 'private, max-age=4'); next(); })
-  //compresses the data, saves ~3x bandwidth, but adds ~90ms latency
+  //compresses the data, saves ~3x bandwidth, but increases latency by ~90ms
   //compression({level: 1}), 
 }
 
@@ -28,8 +28,8 @@ app.get('/positions/cache', compression({level: 1}), cors(), (_, res) => res.jso
 app.get('/positions/:ip', cors(), require("./routes/positions"));
 app.get('/vehicles', cors(), require("./routes/vehicles"));
 app.get('/skillboost', cors(), require("./routes/skillboost"));
-app.get('/status/cache', compression({level: 1}), cors(), (_, res) => res.json(status_cache));
-app.get('/status/:ip', cors(), require("./routes/status"));
+// app.get('/status/cache', compression({level: 1}), cors(), (_, res) => res.json(status_cache));
+// app.get('/status/:ip', cors(), require("./routes/status"));
 app.get('/charges', (_, res) => res.json({ charges: get_charges() }));
 
 app.get(secret_endpoints[0], async (_, res) => res.json({

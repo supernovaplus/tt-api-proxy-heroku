@@ -5,7 +5,7 @@ const POST_DISCORD_LOG = require("./post_discord_log");
 //rate limit resets when dyno/server restarts
 module.exports = allow_ip = (request_ip) => {
     if(request_ip in ip_log_cache){
-        if(ip_log_cache[request_ip] > 10_000){//allow 10k requests
+        if(ip_log_cache[request_ip] > 7_000){//maximum requests per day
             return false;
         }else{
             setTimeout(() => { upload_ip(request_ip); }, 0);
@@ -28,6 +28,6 @@ const post_logs = async () => {
     process.exit(0);
 }
   
-process
-    .on('SIGINT', post_logs)
-    .on('SIGTERM', post_logs);
+// process
+//     .on('SIGINT', post_logs)
+//     .on('SIGTERM', post_logs);

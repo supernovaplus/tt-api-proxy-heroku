@@ -12,10 +12,10 @@ module.exports = fetch_skillboost = (recurring = false, attempt = 0) => {
     return new Promise(async resolve => {
         let found = false;
 
-        for (const server_ip in servers_list) {
+        for (const server_endpoint in servers_list) {
             if(found) break;
             
-            await axios.get(`http://${server_ip}/status/skillrotation.json`, {
+            await axios.get(`https://tycoon-${server_endpoint}.users.cfx.re/status/skillrotation.json`, {
                 responseType: 'json',
                 timeout: 2000,
                 headers: {"X-Tycoon-Key": process.env.TT_KEY}
@@ -44,5 +44,5 @@ module.exports = fetch_skillboost = (recurring = false, attempt = 0) => {
         }
 
         resolve(found);
-    })
+    });
 };

@@ -16,8 +16,7 @@ module.exports = fetch_position = (server) => {
             timestamp: server.timestamp
         });
     }
-
-    return axios.get(`http://${server.ip}/status/map/positions2.json`, {
+    return axios.get(`https://tycoon-${server.endpoint}.users.cfx.re/status/map/positions2.json`, {
         responseType: 'json',
         timeout: server.error ? 3000 : 9000,
         headers: {"X-Tycoon-Key": process.env.TT_KEY}
@@ -28,6 +27,7 @@ module.exports = fetch_position = (server) => {
         server.timestamp = Date.now();
         server.error = null;
         server.fetching = false;
+
         return {
             data: server.data,
             charges: get_charges(),
@@ -37,14 +37,18 @@ module.exports = fetch_position = (server) => {
     }).catch(error => {
         server.data = null;
         server.timestamp = Date.now();
+        
         if(/timeout/.test(error.message)){
             server.error = "server timeout error";
         }else{
             console.log(error.message);
             server.error = "server error";
         }
+
         server.fetching = false;
+
         return {
             error: server.error
-    }});
+        };
+    });
 };

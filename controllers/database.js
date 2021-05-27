@@ -9,7 +9,6 @@ const pool = new Pool({
 
 pool.on('error', (err, client) => {
     console.error('Unexpected error on idle client', err);
-    // process.exit(-1)
 });
 
 const query_db = (...query_string) => pool
@@ -31,11 +30,5 @@ const query_db = (...query_string) => pool
 });
 
 const upload_ip = (request_ip) => query_db(`INSERT INTO ip (user_id, counter) VALUES ($1, 1) ON CONFLICT (user_id) DO UPDATE SET counter = ip.counter + 1, last_visit = NOW();`, [request_ip]);
-
-// client.query(`CREATE TABLE ip ( user_id varchar(16) unique PRIMARY KEY, counter int default 1, last_visit TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`, (err, res) => {
-// console.log(await query_db(`UPDATE ip SET counter = counter + 1 WHERE user_id = $1`, ["1.1.1.1"]));
-// console.log(await query_db(`INSERT INTO ip (user_id, counter) VALUES ($1, $2) ON CONFLICT (user_id) DO NOTHING;`, ["1.1.1.2", 1]));
-// console.log(await query_db(`SELECT * FROM ip;`));
-// query_db(`INSERT INTO ip (user_id, counter) VALUES ($1, 1) ON CONFLICT (user_id) DO UPDATE SET counter = ip.counter + 1`, [request_ip]);
 
 module.exports = { query_db, upload_ip };

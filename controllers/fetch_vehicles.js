@@ -12,14 +12,12 @@ module.exports = fetch_vehicles = () => {
             sorted_vehicles: [],
             sorted_classes: []
         };
-
         const servers_list = Object.values(positions_cache) || [];
 
         await Promise.all(
             servers_list.map(server => 
                 server.timestamp < Date.now() - 300000 ? 
                     fetch_position(server) : undefined ))
-
 
         servers_list.forEach(server => {
             (server?.data?.players || []).forEach(player => {
@@ -54,9 +52,7 @@ module.exports = fetch_vehicles = () => {
         }
 
         Object.assign(vehicles_cache, temp_object);
-
         vehicles_cache.fetching = false;
-
         resolve();
     })
 

@@ -3,6 +3,8 @@ const fetch_vehicles = require("../controllers/fetch_vehicles");
 const { timeout } = require("../controllers/misc");
 
 module.exports = route_vehicles = async (_, res) => {
+    res.setHeader('Cache-Control', 'private, max-age=60');
+
     if(vehicles_cache.fetching){
         let counter = 0;
         while(vehicles_cache.fetching && counter < 20){
