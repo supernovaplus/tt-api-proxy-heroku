@@ -17,7 +17,7 @@ module.exports = fetch_skillboost = (recurring = false, attempt = 0) => {
             
             await axios.get(`https://tycoon-${server_endpoint}.users.cfx.re/status/skillrotation.json`, {
                 responseType: 'json',
-                timeout: 2000,
+                timeout: 3000,
                 headers: {"X-Tycoon-Key": process.env.TT_KEY}
         
             }).then(res => { //server is online
