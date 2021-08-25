@@ -151,7 +151,8 @@ if(process.env.NODE_ENV === "production"){
                             "contents": {"en": `Time left: ${timeString} | Sponsor: ${dxp[1]}`},
                             "included_segments": ["Subscribed Users"],
                             "url": `https://cfx.re/join/${server_endpoint}`,
-                            "ttl": time
+                            "ttl": time,
+                            "persistNotification": false
                         }, {
                             headers: {
                                 "Content-Type": "application/json",
